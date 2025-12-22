@@ -1,0 +1,280 @@
+@import '../App.scss';
+
+.products-page-modern {
+  padding: 120px 0 80px;
+  background: $background-light;
+  
+  .page-header {
+    text-align: center;
+    margin-bottom: 50px;
+    
+    .page-title {
+      font-size: 3rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+      color: $primary-black;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: $accent-red;
+      }
+    }
+    
+    .page-subtitle {
+      font-size: 1.1rem;
+      color: $text-gray;
+      max-width: 600px;
+      margin: 20px auto 0;
+    }
+  }
+  
+  // Filter & Sort Bar
+  .filter-sort-bar {
+    background: $primary-white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    
+    .filter-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      
+      .filter-icon {
+        color: $accent-red;
+        font-size: 1.2rem;
+      }
+      
+      .filter-label {
+        font-weight: 600;
+        color: $primary-black;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+      }
+      
+      .filter-buttons {
+        display: flex;
+        gap: 10px;
+        
+        .filter-btn {
+          padding: 8px 20px;
+          border: 2px solid $medium-gray;
+          background: transparent;
+          color: $text-gray;
+          border-radius: 25px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            border-color: $primary-black;
+            color: $primary-black;
+          }
+          
+          &.active {
+            background: $primary-black;
+            border-color: $primary-black;
+            color: $primary-white;
+          }
+        }
+      }
+    }
+    
+    .sort-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      
+      .sort-icon {
+        color: $accent-red;
+        font-size: 1.2rem;
+      }
+      
+      .sort-label {
+        font-weight: 600;
+        color: $primary-black;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+      }
+      
+      .sort-select {
+        border: 2px solid $medium-gray;
+        border-radius: 25px;
+        padding: 8px 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        min-width: 200px;
+        transition: all 0.3s ease;
+        
+        &:focus {
+          border-color: $primary-black;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+  
+  // Products Grid
+  .products-grid-section {
+    .row {
+      margin: 0 -15px;
+    }
+  }
+  
+  // No Products
+  .no-products {
+    h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: $primary-black;
+      margin-bottom: 15px;
+    }
+    
+    p {
+      font-size: 1.1rem;
+      color: $text-gray;
+    }
+  }
+  
+  // Collections Banner
+  .collections-banner {
+    .collection-promo {
+      height: 300px;
+      border-radius: 15px;
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)),
+                  url('https://via.placeholder.com/600x400/333/FFFFFF?text=COLLECTION');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      
+      &:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        
+        &::before {
+          opacity: 0.2;
+        }
+      }
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, $accent-red, transparent);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      .promo-content {
+        position: relative;
+        z-index: 2;
+        color: $primary-white;
+        
+        h3 {
+          font-size: 2rem;
+          font-weight: 800;
+          margin-bottom: 15px;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          
+          @media (max-width: 768px) {
+            font-size: 1.5rem;
+          }
+        }
+        
+        p {
+          font-size: 1rem;
+          margin-bottom: 25px;
+          opacity: 0.9;
+          max-width: 400px;
+        }
+        
+        .btn-promo {
+          background: transparent;
+          border: 2px solid $primary-white;
+          color: $primary-white;
+          border-radius: 25px;
+          padding: 10px 25px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: $primary-white;
+            color: $primary-black;
+          }
+        }
+      }
+    }
+  }
+  
+  // Responsive
+  @media (max-width: 992px) {
+    .filter-sort-bar {
+      flex-direction: column;
+      align-items: stretch;
+      
+      .filter-section {
+        flex-wrap: wrap;
+        
+        .filter-buttons {
+          flex-wrap: wrap;
+        }
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 100px 0 60px;
+    
+    .page-header {
+      .page-title {
+        font-size: 2.5rem;
+      }
+    }
+    
+    .filter-sort-bar {
+      .filter-section,
+      .sort-section {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+    
+    .collection-promo {
+      height: 250px;
+      padding: 20px;
+    }
+  }
+}

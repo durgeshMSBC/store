@@ -1,0 +1,254 @@
+@import 'variables';
+@import 'mixins';
+
+// Global Styles
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-primary;
+  color: $primary-color;
+  line-height: 1.6;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+}
+
+// Header Styles
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: $primary-color !important;
+}
+
+.nav-link {
+  color: $primary-color !important;
+  font-weight: 500;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $accent-color !important;
+  }
+}
+
+// Hero Section
+.hero-section {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+    url('/images/hero-bg.jpg') center/cover no-repeat;
+  color: $white;
+  padding: $spacing-xl 0;
+  text-align: center;
+
+  h1 {
+    font-size: 3rem;
+    margin-bottom: $spacing-md;
+  }
+
+  p {
+    font-size: 1.2rem;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+// Product Cards
+.product-card {
+  border: 1px solid $gray-light;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-image {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+
+  .product-info {
+    padding: $spacing-md;
+  }
+
+  .product-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: $spacing-xs;
+  }
+
+  .product-price {
+    color: $accent-color;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+}
+
+// Services Section
+.services-section {
+  background-color: $light-bg;
+  padding: $spacing-xl 0;
+
+  .service-item {
+    text-align: center;
+    padding: $spacing-md;
+
+    i {
+      font-size: 2.5rem;
+      color: $accent-color;
+      margin-bottom: $spacing-md;
+    }
+
+    h4 {
+      margin-bottom: $spacing-sm;
+      font-weight: 600;
+    }
+  }
+}
+
+// Footer Styles
+.footer {
+  background-color: $dark-bg;
+  color: $white;
+  padding: $spacing-xl 0;
+
+  .footer-section {
+    h5 {
+      color: $white;
+      margin-bottom: $spacing-md;
+      font-weight: 600;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+
+      li {
+        margin-bottom: $spacing-xs;
+
+        a {
+          color: $gray-medium;
+          text-decoration: none;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: $white;
+          }
+        }
+      }
+    }
+  }
+
+  .footer-bottom {
+    margin-top: $spacing-lg;
+    padding-top: $spacing-md;
+    border-top: 1px solid $gray-medium;
+    text-align: center;
+    color: $gray-medium;
+  }
+}
+
+// Cart Page
+.cart-page {
+  .cart-item {
+    border-bottom: 1px solid $gray-light;
+    padding: $spacing-md 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .cart-summary {
+    background-color: $light-bg;
+    padding: $spacing-lg;
+    border-radius: 8px;
+
+    .total-amount {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: $accent-color;
+    }
+  }
+}
+
+// About Page
+.about-page {
+  .founder-section {
+    img {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 8px;
+      margin-bottom: $spacing-lg;
+    }
+
+    .founder-info {
+      h2 {
+        margin-bottom: $spacing-md;
+      }
+
+      p {
+        margin-bottom: $spacing-sm;
+      }
+    }
+  }
+}
+
+// Contact Page
+.contact-page {
+  .contact-form {
+    background-color: $light-bg;
+    padding: $spacing-lg;
+    border-radius: 8px;
+  }
+
+  .contact-info {
+    .info-item {
+      margin-bottom: $spacing-md;
+
+      i {
+        color: $accent-color;
+        margin-right: $spacing-sm;
+      }
+    }
+  }
+}
+
+// Responsive Styles
+@media (max-width: $breakpoint-md) {
+  .hero-section {
+    h1 {
+      font-size: 2rem;
+    }
+
+    p {
+      font-size: 1rem;
+    }
+  }
+
+  .product-card {
+    margin-bottom: $spacing-md;
+  }
+}
+
+@media (max-width: $breakpoint-sm) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+
+  .hero-section {
+    padding: $spacing-lg 0;
+  }
+}

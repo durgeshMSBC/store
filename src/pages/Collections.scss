@@ -1,0 +1,438 @@
+@import '../App.scss';
+
+.collections-page-modern {
+  padding: 120px 0 80px;
+  background: $background-light;
+  
+  // Hero Section
+  .collections-hero {
+    text-align: center;
+    margin-bottom: 60px;
+    
+    .page-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-bottom: 15px;
+      color: $primary-black;
+      position: relative;
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80px;
+        height: 3px;
+        background: $accent-red;
+      }
+    }
+    
+    .page-subtitle {
+      font-size: 1.2rem;
+      color: $text-gray;
+      max-width: 700px;
+      margin: 30px auto 0;
+      line-height: 1.6;
+    }
+  }
+  
+  // Collections Grid Section
+  .collections-grid-section {
+    margin-bottom: 80px;
+    
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+      
+      .section-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: $primary-black;
+        position: relative;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -10px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 40px;
+          height: 3px;
+          background: $accent-red;
+        }
+      }
+      
+      .section-subtitle {
+        font-size: 1.1rem;
+        color: $text-gray;
+        margin-top: 20px;
+      }
+    }
+    
+    .collection-card-modern {
+      background: $primary-white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      height: 100%;
+      
+      &:hover, &.active {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        
+        .collection-image {
+          .collection-overlay {
+            opacity: 0.7;
+          }
+        }
+      }
+      
+      &.active {
+        border: 3px solid $accent-red;
+      }
+      
+      .collection-image {
+        height: 200px;
+        background-size: cover;
+        background-position: center;
+        position: relative;
+        
+        .collection-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, rgba(0,0,0,0.7), rgba(255,45,45,0.3));
+          opacity: 0.5;
+          transition: opacity 0.3s ease;
+        }
+        
+        .collection-count {
+          position: absolute;
+          bottom: 15px;
+          left: 15px;
+          background: rgba(255, 255, 255, 0.9);
+          color: $primary-black;
+          padding: 5px 15px;
+          border-radius: 25px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+      }
+      
+      .collection-content {
+        padding: 25px;
+        
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 800;
+          margin-bottom: 10px;
+          color: $primary-black;
+        }
+        
+        p {
+          font-size: 0.95rem;
+          color: $text-gray;
+          margin-bottom: 20px;
+          line-height: 1.5;
+        }
+        
+        .btn-explore {
+          background: $primary-black;
+          border: none;
+          border-radius: 25px;
+          padding: 8px 20px;
+          font-size: 0.85rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: $accent-red;
+            transform: translateX(5px);
+          }
+        }
+      }
+    }
+  }
+  
+  // Products Section
+  .collection-products-section {
+    margin-bottom: 80px;
+    
+    .section-header {
+      .section-title {
+        font-size: 2rem;
+        font-weight: 800;
+        color: $primary-black;
+        margin-bottom: 5px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      
+      .section-subtitle {
+        font-size: 1rem;
+        color: $text-gray;
+      }
+      
+      .filter-controls {
+        .filter-group {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          
+          .filter-icon {
+            color: $accent-red;
+            font-size: 1.2rem;
+          }
+          
+          .filter-select {
+            border: 2px solid $medium-gray;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: $primary-white;
+            color: $primary-black;
+            min-width: 200px;
+            transition: all 0.3s ease;
+            
+            &:focus {
+              border-color: $primary-black;
+              outline: none;
+            }
+          }
+        }
+      }
+    }
+    
+    .no-products {
+      background: $primary-white;
+      padding: 60px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      
+      .no-products-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+      }
+      
+      h3 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: $primary-black;
+        margin-bottom: 10px;
+      }
+      
+      p {
+        font-size: 1.1rem;
+        color: $text-gray;
+      }
+    }
+  }
+  
+  // Featured Collection
+  .featured-collection-section {
+    margin-bottom: 80px;
+    
+    .featured-collection-card {
+      background: linear-gradient(135deg, $primary-black, $dark-gray);
+      border-radius: 20px;
+      overflow: hidden;
+      padding: 0;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      
+      .featured-content {
+        padding: 50px;
+        color: $primary-white;
+        
+        .featured-title {
+          font-size: 1rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 3px;
+          color: $accent-red;
+          margin-bottom: 10px;
+        }
+        
+        .featured-name {
+          font-size: 2.5rem;
+          font-weight: 800;
+          margin-bottom: 20px;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          
+          @media (max-width: 768px) {
+            font-size: 2rem;
+          }
+        }
+        
+        .featured-description {
+          font-size: 1.1rem;
+          color: rgba(255, 255, 255, 0.9);
+          margin-bottom: 30px;
+          line-height: 1.6;
+          max-width: 500px;
+        }
+        
+        .btn-featured {
+          background: $accent-red;
+          border: none;
+          border-radius: 25px;
+          padding: 12px 30px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: $primary-white;
+            color: $primary-black;
+            transform: translateY(-3px);
+          }
+        }
+      }
+      
+      .featured-image-wrapper {
+        height: 100%;
+        
+        .featured-image {
+          height: 100%;
+          min-height: 400px;
+          background-size: cover;
+          background-position: center;
+          position: relative;
+          
+          .featured-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: $accent-red;
+            color: $primary-white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+          }
+        }
+      }
+    }
+  }
+  
+  // CTA Section
+  .collections-cta-section {
+    .cta-content {
+      background: $primary-white;
+      padding: 60px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+      
+      .cta-title {
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: $primary-black;
+        
+        @media (max-width: 768px) {
+          font-size: 2rem;
+        }
+      }
+      
+      .cta-text {
+        font-size: 1.2rem;
+        color: $text-gray;
+        max-width: 600px;
+        margin: 0 auto 30px;
+        line-height: 1.6;
+      }
+      
+      .cta-buttons {
+        .btn-cta-primary {
+          background: $primary-black;
+          border: none;
+          border-radius: 25px;
+          padding: 12px 30px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: $accent-red;
+            transform: translateY(-3px);
+          }
+        }
+        
+        .btn-cta-whatsapp {
+          background: #25D366;
+          border: none;
+          border-radius: 25px;
+          padding: 12px 30px;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          color: $primary-white;
+          transition: all 0.3s ease;
+          
+          &:hover {
+            background: darken(#25D366, 10%);
+            transform: translateY(-3px);
+          }
+        }
+      }
+    }
+  }
+  
+  // Responsive
+  @media (max-width: 992px) {
+    .featured-collection-card {
+      .row {
+        flex-direction: column-reverse;
+      }
+      
+      .featured-content {
+        padding: 30px;
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 100px 0 60px;
+    
+    .collections-hero {
+      .page-title {
+        font-size: 2.5rem;
+      }
+    }
+    
+    .collection-products-section {
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+      }
+    }
+    
+    .cta-content {
+      padding: 40px 20px;
+    }
+  }
+}

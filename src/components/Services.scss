@@ -1,0 +1,94 @@
+@import '../App.scss';
+
+.services-modern {
+  padding: 60px 0;
+  background: linear-gradient(135deg, $background-light 0%, $light-gray 100%);
+  
+  .service-card-modern {
+    padding: 40px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    
+    &.light {
+      background: $primary-white;
+    }
+    
+    &.dark {
+      background: $light-gray;
+    }
+    
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      
+      .service-icon {
+        transform: rotateY(180deg);
+        color: $accent-red;
+      }
+    }
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, $primary-black, $accent-red);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    &:hover::before {
+      opacity: 1;
+    }
+    
+    .service-icon-wrapper {
+      margin-bottom: 20px;
+      
+      .service-icon {
+        font-size: 2.5rem;
+        color: $primary-black;
+        transition: all 0.5s ease;
+      }
+    }
+    
+    .service-content {
+      .service-title {
+        font-size: 1rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        color: $primary-black;
+      }
+      
+      .service-description {
+        font-size: 0.9rem;
+        color: $text-gray;
+        line-height: 1.5;
+        margin-bottom: 0;
+      }
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .service-card-modern {
+      border-bottom: 1px solid $medium-gray;
+      
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 40px 0;
+    
+    .service-card-modern {
+      padding: 30px 15px;
+    }
+  }
+}

@@ -1,0 +1,142 @@
+@import '../App.scss';
+
+.footer-modern {
+  background: $primary-black;
+  color: $primary-white;
+  padding: 60px 0 0;
+  margin-top: auto;
+  
+  .footer-top {
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .footer-title {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1.5rem;
+    color: $primary-white;
+    position: relative;
+    padding-bottom: 10px;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: $accent-red;
+    }
+  }
+  
+  .footer-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      margin-bottom: 0.8rem;
+      
+      a {
+        color: rgba(255, 255, 255, 0.7);
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-block;
+        
+        &:hover {
+          color: $accent-red;
+          transform: translateX(5px);
+        }
+      }
+    }
+  }
+  
+  .happy-hours {
+    p {
+      margin-bottom: 0.3rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+      
+      &.hours {
+        font-weight: 600;
+        color: $accent-red;
+        font-size: 1rem;
+      }
+    }
+  }
+  
+  .social-icons {
+    display: flex;
+    gap: 15px;
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      color: $primary-white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      
+      &:hover {
+        background: $accent-red;
+        transform: translateY(-3px);
+      }
+    }
+  }
+  
+  .footer-contact {
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      
+      .contact-icon {
+        font-size: 1.5rem;
+        color: $accent-red;
+      }
+      
+      h6 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        color: $primary-white;
+      }
+      
+      p {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        margin: 0;
+      }
+    }
+  }
+  
+  .footer-bottom {
+    .epsilon-address {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    padding: 40px 0 0;
+    
+    .footer-title {
+      font-size: 0.9rem;
+    }
+    
+    .footer-list li a {
+      font-size: 0.85rem;
+    }
+  }
+}
