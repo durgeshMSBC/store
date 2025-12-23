@@ -21,15 +21,28 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log('Form submitted:', formData)
-    // Show success message
+    // Build WhatsApp message and redirect to WhatsApp
+    const phoneNumber = '9460092903'
+    let message = '📩 *New Contact Message*\n\n'
+    message += `*Name:* ${formData.name || '-'}\n`
+    message += `*Email:* ${formData.email || '-'}\n`
+    message += `*WhatsApp Number:* ${formData.phone || '-'}\n`
+    message += `*Subject:* ${formData.subject || '-'}\n\n`
+    message += `*Message:*\n${formData.message || '-'}\n\n`
+    message += '---\nSent from NOZ StreetStyle website'
+
+    const encoded = encodeURIComponent(message)
+    const waUrl = `https://wa.me/${phoneNumber}?text=${encoded}`
+    window.open(waUrl, '_blank')
+
     const event = new CustomEvent('showNotification', {
       detail: {
         type: 'success',
-        message: 'Message sent successfully! We\'ll contact you soon.'
+        message: 'Message prepared — opening WhatsApp to send.'
       }
     })
     window.dispatchEvent(event)
+
     setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
   }
 
@@ -69,7 +82,7 @@ const Contact = () => {
             <div className="contact-info-modern">
               <h2 className="section-title">GET IN TOUCH</h2>
               
-              <div className="contact-details">
+              <div className="contact-details" data-aos="fade-up">
                 {contactInfo.map((info, index) => (
                   <div className="contact-item" key={index}>
                     <div className="contact-icon-wrapper">
@@ -87,7 +100,7 @@ const Contact = () => {
                 ))}
               </div>
               
-              <div className="whatsapp-contact mt-5">
+              <div className="whatsapp-contact mt-5" data-aos="fade-up">
                 <div className="whatsapp-card">
                   <div className="whatsapp-icon">
                     <FaWhatsapp />
@@ -111,7 +124,7 @@ const Contact = () => {
           </Col>
           
           <Col lg={6}>
-            <div className="contact-form-modern">
+            <div className="contact-form-modern" data-aos="fade-left">
               <h2 className="section-title">SEND MESSAGE</h2>
               
               <Form onSubmit={handleSubmit}>
@@ -151,7 +164,7 @@ const Contact = () => {
                 </Form.Group>
                 
                 <Form.Group className="mb-3">
-                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Label>WhatsApp Number</Form.Label>
                   <Form.Control 
                     type="tel" 
                     name="phone"

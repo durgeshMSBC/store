@@ -3,7 +3,9 @@
 .services-modern {
   padding: 60px 0;
   background: linear-gradient(135deg, $background-light 0%, $light-gray 100%);
-  
+  .container-modern{
+    padding: 0px 30px;
+  }
   .service-card-modern {
     padding: 40px 20px;
     text-align: center;

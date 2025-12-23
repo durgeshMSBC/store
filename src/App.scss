@@ -83,7 +83,7 @@ $text-color: #ff6b6b;
 
 main {
   flex: 1;
-  padding-top: 140px; // Account for fixed header + banner
+  padding-top: 78px; // Account for fixed header + banner
 }
 
 // Section Spacing
@@ -99,7 +99,6 @@ main {
 .container-modern {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px;
 }
 
 // Page Title

@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { useEffect } from 'react'
+import AOS from 'aos'
+import 'aos/dist/aos.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -11,6 +14,12 @@ import './index.scss'
 import Collections from './pages/Collections'
 
 function App() {
+  useEffect(() => {
+    AOS.init({ once: true, duration: 700, easing: 'ease-out-cubic' })
+    // refresh AOS on load to ensure layout-based animations initialize
+    window.addEventListener('load', AOS.refresh)
+    return () => window.removeEventListener('load', AOS.refresh)
+  }, [])
   return (
     <Router>
       <div className="app-container">

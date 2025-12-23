@@ -18,30 +18,34 @@ const ProductCard = ({ product, onAddToCart, onQuickView }) => {
     { name: 'Gray', code: '#808080' }
   ]
 
-  const handleAddToCart = () => {
-    if (!selectedSize || !selectedColor) {
-      alert('Please select size and color')
-      return
-    }
-    
-    const cartItem = {
-      ...product,
-      size: selectedSize,
-      color: selectedColor
-    }
-    
-    onAddToCart(cartItem)
+  const handleQuickView = (e) => {
+  e.stopPropagation()
+  onQuickView(product)
+}
+
+const handleAddToCart = (e) => {
+  e.stopPropagation()
+
+  if (!selectedSize || !selectedColor) {
+    alert('Please select size and color')
+    return
   }
 
-  const handleQuickView = () => {
-    onQuickView(product)
-  }
+  onAddToCart({
+    ...product,
+    size: selectedSize,
+    color: selectedColor
+  })
+}
+
 
   return (
     <Card 
-      className={`product-card-modern ${isHovered ? 'hovered' : ''}`}
+      className={`product-card-modern ${isHovered ? 'hovered' : 'hovered'}`}
+      data-aos="zoom-in"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={() => setIsHovered(true)}
     >
       {/* Product Badge */}
       {product.discount && (

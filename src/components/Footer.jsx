@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="footer-modern">
       <Container className="container-modern">
-        <Row className="footer-top">
+        <Row className="footer-top" data-aos="fade-up">
           {/* Your Account */}
           <Col lg={2} md={4} sm={6} className="mb-4">
             <h5 className="footer-title">YOUR ACCOUNT</h5>

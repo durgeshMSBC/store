@@ -4,122 +4,34 @@ import { Link } from 'react-router-dom'
 import { FaShoppingBag, FaArrowRight, FaFilter, FaSearch } from 'react-icons/fa'
 import ProductCard from '../components/ProductCard'
 import './Collections.scss'
+import { products as productsData } from '../data/Products'
+import { useCart } from '../contexts/CartContext'
 
 const Collections = () => {
   const [activeCollection, setActiveCollection] = useState('all')
   const [sortBy, setSortBy] = useState('featured')
   
+  // derive collections dynamically from central products data
+  const categoryMap = productsData.reduce((acc, p) => {
+    const key = (p.category || 'uncategorized').toString().toLowerCase()
+    if (!acc[key]) acc[key] = { id: key, name: (p.category || 'Uncategorized'), count: 0, image: p.image }
+    acc[key].count += 1
+    if (!acc[key].image && p.image) acc[key].image = p.image
+    return acc
+  }, {})
+
   const collections = [
-    {
-      id: 'classic',
-      name: 'Classic Collection',
-      description: 'Timeless designs for everyday elegance',
-      image: 'https://via.placeholder.com/400x300/333/FFFFFF?text=CLASSIC',
-      count: 12
-    },
-    {
-      id: 'casual',
-      name: 'Casual Shoes',
-      description: 'Comfortable shoes for your relaxed lifestyle',
-      image: 'https://via.placeholder.com/400x300/666/FFFFFF?text=CASUAL',
-      count: 8
-    },
-    {
-      id: 'running',
-      name: 'Running Shoes',
-      description: 'Performance footwear for athletes',
-      image: 'https://via.placeholder.com/400x300/444/FFFFFF?text=RUNNING',
-      count: 10
-    },
-    {
-      id: 'basketball',
-      name: 'Basketball Shoes',
-      description: 'Court-ready shoes for maximum performance',
-      image: 'https://via.placeholder.com/400x300/555/FFFFFF?text=BASKETBALL',
-      count: 6
-    },
-    {
-      id: 'football',
-      name: 'Football Shoes',
-      description: 'Professional grade football footwear',
-      image: 'https://via.placeholder.com/400x300/777/FFFFFF?text=FOOTBALL',
-      count: 7
-    },
-    {
-      id: 'trainer',
-      name: 'Trainer Shoes',
-      description: 'Perfect for gym and training sessions',
-      image: 'https://via.placeholder.com/400x300/888/FFFFFF?text=TRAINER',
-      count: 9
-    }
+    { id: 'all', name: 'All Collections', description: 'Browse all products', image: '', count: productsData.length },
+    ...Object.values(categoryMap)
   ]
 
-  const products = [
-    {
-      id: 1,
-      name: "CLASSIC LEATHER SNEAKERS",
-      category: "CLASSIC COLLECTION",
-      price: 129.99,
-      originalPrice: 159.99,
-      discount: 19,
-      image: "https://via.placeholder.com/300x250/333/FFFFFF?text=CLASSIC+SHOE",
-      collection: "classic",
-      isNew: true
-    },
-    {
-      id: 2,
-      name: "RUNNING PRO SHOES",
-      category: "RUNNING COLLECTION",
-      price: 159.99,
-      originalPrice: 199.99,
-      discount: 20,
-      image: "https://via.placeholder.com/300x250/666/FFFFFF?text=RUNNING+SHOE",
-      collection: "running"
-    },
-    {
-      id: 3,
-      name: "CASUAL CANVAS SNEAKERS",
-      category: "CASUAL COLLECTION",
-      price: 89.99,
-      originalPrice: 119.99,
-      discount: 25,
-      image: "https://via.placeholder.com/300x250/444/FFFFFF?text=CASUAL+SHOE",
-      collection: "casual",
-      isNew: true
-    },
-    {
-      id: 4,
-      name: "BASKETBALL PRO",
-      category: "SPORTS COLLECTION",
-      price: 179.99,
-      image: "https://via.placeholder.com/300x250/555/FFFFFF?text=BASKETBALL",
-      collection: "basketball"
-    },
-    {
-      id: 5,
-      name: "FOOTBALL CLEATS PRO",
-      category: "SPORTS COLLECTION",
-      price: 149.99,
-      originalPrice: 189.99,
-      discount: 21,
-      image: "https://via.placeholder.com/300x250/777/FFFFFF?text=FOOTBALL",
-      collection: "football"
-    },
-    {
-      id: 6,
-      name: "TRAINER SHOES",
-      category: "FITNESS COLLECTION",
-      price: 99.99,
-      originalPrice: 129.99,
-      discount: 23,
-      image: "https://via.placeholder.com/300x250/888/FFFFFF?text=TRAINER",
-      collection: "trainer",
-      isNew: true
-    }
-  ]
+  // use central products list for collection products
+  const products = productsData
+
+  const { addToCart } = useCart()
 
   const handleAddToCart = (product) => {
-    console.log('Added to cart:', product)
+    addToCart(product)
     const event = new CustomEvent('showNotification', {
       detail: {
         type: 'success',
@@ -140,14 +52,6 @@ const Collections = () => {
   return (
     <div className="collections-page-modern">
       <Container className="container-modern">
-        {/* Hero Section */}
-        <div className="collections-hero">
-          <h1 className="page-title">OUR COLLECTIONS</h1>
-          <p className="page-subtitle">
-            Discover our curated collections designed for every occasion and style
-          </p>
-        </div>
-
         {/* Collections Grid */}
         <section className="collections-grid-section">
           <div className="section-header">
@@ -163,6 +67,7 @@ const Collections = () => {
                 <div 
                   className={`collection-card-modern ${activeCollection === collection.id ? 'active' : ''}`}
                   onClick={() => setActiveCollection(collection.id)}
+                  data-aos="fade-up"
                 >
                   <div 
                     className="collection-image"
@@ -233,7 +138,7 @@ const Collections = () => {
           ) : (
             <Row className="mt-4">
               {filteredProducts.map(product => (
-                <Col lg={4} md={6} className="mb-4" key={product.id}>
+                <Col lg={4} md={6} className="mb-4" key={product.id} data-aos="fade-up">
                   <ProductCard 
                     product={product} 
                     onAddToCart={handleAddToCart}

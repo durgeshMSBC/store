@@ -1,67 +1,59 @@
 import { useState } from 'react'
-import { Container, Row, Col, Table, Button, Form } from 'react-bootstrap'
+import { Container, Row, Col, Table, Button, Form, Badge } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
-import { FaTrash, FaWhatsapp, FaPlus, FaMinus, FaArrowLeft } from 'react-icons/fa'
+import { FaTrash, FaWhatsapp, FaPlus, FaMinus, FaArrowLeft, FaTruck, FaShieldAlt, FaSyncAlt, FaCreditCard } from 'react-icons/fa'
 import './Cart.scss'
+import shoes1 from '../assets/nike-1.webp'
+import shoes2 from '../assets/nike-2.webp'
+import { useCart } from '../contexts/CartContext'
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "BISSELIZING BAGGED CANISTER VACUUM",
-      size: "9",
-      color: "Black",
-      price: 498.32,
-      quantity: 1,
-      image: "https://via.placeholder.com/100x100/333/FFFFFF?text=Shoe+1"
-    },
-    {
-      id: 2,
-      name: "BLACK & RECKEN LENZOIC 09-VOLT MAX",
-      size: "10",
-      color: "White",
-      price: 22.49,
-      quantity: 2,
-      image: "https://via.placeholder.com/100x100/666/FFFFFF?text=Shoe+2"
-    }
-  ])
-
-  const [shipping, setShipping] = useState(0)
+  const { cartItems, updateQuantity, removeItem, clearCart, shipping, setShipping, appliedCoupon, applyCoupon } = useCart()
+  const [couponInput, setCouponInput] = useState('')
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const tax = subtotal * 0.08
-  const total = subtotal + shipping + tax
+  const discount = appliedCoupon ? subtotal * 0.1 : 0
+  const tax = (subtotal - discount) * 0.08
+  const total = subtotal - discount + shipping + tax
 
-  const updateQuantity = (id, newQuantity) => {
-    if (newQuantity < 1) return
-    setCartItems(items =>
-      items.map(item =>
-        item.id === id ? { ...item, quantity: newQuantity } : item
-      )
-    )
-  }
-
-  const removeItem = (id) => {
-    setCartItems(items => items.filter(item => item.id !== id))
+  const handleApplyCoupon = () => {
+    const ok = applyCoupon(couponInput)
+    if (!ok) {
+      alert('Invalid coupon code')
+    }
   }
 
   const handleOrderNow = () => {
     const phoneNumber = "9460092903"
-    let message = "Hello! I want to order the following items:\n\n"
+    let message = "🚀 *NEW ORDER REQUEST*\n\n"
+    message += "*Customer Information:*\n"
+    message += "--------------------\n\n"
+    message += "*Order Details:*\n"
+    message += "--------------------\n"
     
     cartItems.forEach((item, index) => {
-      message += `${index + 1}. ${item.name}\n`
-      message += `   Size: ${item.size}\n`
-      message += `   Color: ${item.color}\n`
-      message += `   Quantity: ${item.quantity}\n`
-      message += `   Price: $${item.price.toFixed(2)}\n\n`
+      message += `\n*${index + 1}. ${item.name}*\n`
+      message += `   📦 Code: ${item.code}\n`
+      message += `   📏 Size: ${item.size}\n`
+      message += `   🎨 Color: ${item.color}\n`
+      message += `   🔢 Quantity: ${item.quantity}\n`
+      message += `   💰 Price: $${item.price.toFixed(2)}\n`
+      message += `   📊 Total: $${(item.price * item.quantity).toFixed(2)}\n`
+      message += `   ${item.inStock ? '✅ In Stock' : '⚠️ Out of Stock'}\n`
     })
     
-    message += `Subtotal: $${subtotal.toFixed(2)}\n`
-    message += `Shipping: $${shipping.toFixed(2)}\n`
-    message += `Tax: $${tax.toFixed(2)}\n`
-    message += `Total: $${total.toFixed(2)}\n\n`
-    message += "Please confirm my order!"
+    message += "\n--------------------\n"
+    message += `\n*Subtotal:* $${subtotal.toFixed(2)}`
+    if (discount > 0) {
+      message += `\n*Discount (${appliedCoupon}):* -$${discount.toFixed(2)}`
+    }
+    message += `\n*Shipping:* $${shipping.toFixed(2)}`
+    message += `\n*Tax:* $${tax.toFixed(2)}`
+    message += `\n*Total Amount:* $${total.toFixed(2)}`
+    message += "\n\n--------------------\n"
+    message += "\n📞 *Contact Details:*\n"
+    message += "Please contact me to confirm shipping address and payment details.\n\n"
+    message += "Best regards,\n[Your Name]"
     
     const encodedMessage = encodeURIComponent(message)
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`
@@ -74,7 +66,9 @@ const Cart = () => {
       <Container className="container-modern">
         <div className="page-header">
           <h1 className="page-title">SHOPPING CART</h1>
-          <p className="page-subtitle">Review your items and proceed to checkout</p>
+          <p className="page-subtitle">
+            Review your selected items. Add more or proceed to secure checkout.
+          </p>
         </div>
         
         {cartItems.length === 0 ? (
@@ -83,10 +77,10 @@ const Cart = () => {
               🛒
             </div>
             <h3>Your cart is empty</h3>
-            <p>Add some products to your cart</p>
+            <p>Looks like you haven't added any products to your cart yet.</p>
             <Button as={Link} to="/products" className="btn-shopping">
               <FaArrowLeft className="me-2" />
-              Continue Shopping
+              Start Shopping
             </Button>
           </div>
         ) : (
@@ -94,6 +88,15 @@ const Cart = () => {
             <Row>
               <Col lg={8}>
                 <div className="cart-items-modern">
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <h4 className="mb-0">
+                      Your Items ({cartItems.reduce((sum, item) => sum + item.quantity, 0)})
+                    </h4>
+                    <Badge bg="light" text="dark" className="px-3 py-2">
+                      {cartItems.filter(item => item.inStock).length} in stock
+                    </Badge>
+                  </div>
+                  
                   <Table responsive>
                     <thead>
                       <tr>
@@ -108,8 +111,8 @@ const Cart = () => {
                     </thead>
                     <tbody>
                       {cartItems.map(item => (
-                        <tr key={item.id}>
-                          <td>
+                        <tr key={item.id} data-label="product" data-aos="fade-up">
+                          <td data-label="Product">
                             <div className="product-info">
                               <img 
                                 src={item.image} 
@@ -118,33 +121,43 @@ const Cart = () => {
                               />
                               <div className="product-details">
                                 <h6>{item.name}</h6>
+                                <div className="product-code">{item.code}</div>
+                                {!item.inStock && (
+                                  <Badge bg="warning" text="dark" className="mt-2">
+                                    Out of Stock
+                                  </Badge>
+                                )}
                               </div>
                             </div>
                           </td>
-                          <td>
+                          <td data-label="Size">
                             <span className="size-badge">{item.size}</span>
                           </td>
-                          <td>
+                          <td data-label="Color">
                             <div className="color-display">
                               <span 
                                 className="color-dot"
                                 style={{ 
                                   backgroundColor: item.color === 'Black' ? '#000' : 
-                                                 item.color === 'White' ? '#FFF' : '#FF0000',
-                                  border: item.color === 'White' ? '1px solid #ccc' : 'none'
+                                                 item.color === 'White' ? '#FFF' : 
+                                                 item.color === 'Red' ? '#FF0000' : '#333',
+                                  border: item.color === 'White' ? '2px solid #ccc' : 'none'
                                 }}
                               />
                               <span>{item.color}</span>
                             </div>
                           </td>
-                          <td className="price">${item.price.toFixed(2)}</td>
-                          <td>
+                          <td data-label="Price" className="price">
+                            ${item.price.toFixed(2)}
+                          </td>
+                          <td data-label="Quantity">
                             <div className="quantity-control">
                               <Button 
                                 variant="outline-secondary" 
                                 size="sm"
                                 className="quantity-btn"
                                 onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                disabled={item.quantity <= 1}
                               >
                                 <FaMinus />
                               </Button>
@@ -159,8 +172,10 @@ const Cart = () => {
                               </Button>
                             </div>
                           </td>
-                          <td className="total">${(item.price * item.quantity).toFixed(2)}</td>
-                          <td>
+                          <td data-label="Total" className="total">
+                            ${(item.price * item.quantity).toFixed(2)}
+                          </td>
+                          <td data-label="Action">
                             <Button 
                               variant="outline-danger" 
                               size="sm"
@@ -176,12 +191,13 @@ const Cart = () => {
                   </Table>
                 </div>
                 
-                <div className="cart-actions mt-4">
+                <div className="cart-actions">
                   <Button as={Link} to="/products" className="btn-continue">
                     <FaArrowLeft className="me-2" />
                     Continue Shopping
                   </Button>
-                  <Button variant="outline-danger" onClick={() => setCartItems([])}>
+                  <Button variant="outline-danger" onClick={() => clearCart()}>
+                    <FaTrash className="me-2" />
                     Clear Cart
                   </Button>
                 </div>
@@ -198,26 +214,71 @@ const Cart = () => {
                     </div>
                     
                     <div className="summary-item">
-                      <span>Shipping</span>
+                      <span>Discount</span>
+                      <span className="text-success">
+                        {discount > 0 ? `-$${discount.toFixed(2)}` : '$0.00'}
+                      </span>
+                    </div>
+                    
+                    <div className="summary-item">
+                      <span>
+                        <FaTruck className="me-2" />
+                        Shipping
+                      </span>
                       <span>${shipping.toFixed(2)}</span>
                     </div>
                     
                     <div className="summary-item">
-                      <span>Tax (8%)</span>
+                      <span>
+                        <FaShieldAlt className="me-2" />
+                        Tax (8%)
+                      </span>
                       <span>${tax.toFixed(2)}</span>
                     </div>
                     
                     <div className="summary-item total">
-                      <span>Total</span>
+                      <span>Total Amount</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
                   </div>
                   
+                  <div className="coupon-section mt-4">
+                      <div className="input-group">
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter coupon code"
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value)}
+                          disabled={!!appliedCoupon}
+                        />
+                        <Button 
+                          variant={appliedCoupon ? "success" : "dark"}
+                          onClick={handleApplyCoupon}
+                          disabled={!!appliedCoupon}
+                        >
+                          {appliedCoupon ? 'Applied' : 'Apply'}
+                        </Button>
+                      </div>
+                      {appliedCoupon && (
+                        <small className="text-success d-block mt-2">
+                          🎉 10% discount applied with code {appliedCoupon}
+                        </small>
+                      )}
+                  </div>
+                  
                   <div className="shipping-options mt-4">
-                    <h6>Shipping Options</h6>
+                    <h6>
+                      <FaTruck className="me-2" />
+                      Shipping Options
+                    </h6>
                     <Form.Check
                       type="radio"
-                      label="Standard Shipping - $0.00"
+                      label={
+                        <>
+                          Standard Shipping
+                          <span className="shipping-price">$0.00</span>
+                        </>
+                      }
                       name="shipping"
                       checked={shipping === 0}
                       onChange={() => setShipping(0)}
@@ -225,7 +286,12 @@ const Cart = () => {
                     />
                     <Form.Check
                       type="radio"
-                      label="Express Shipping - $15.00"
+                      label={
+                        <>
+                          Express Shipping (2-3 days)
+                          <span className="shipping-price">$15.00</span>
+                        </>
+                      }
                       name="shipping"
                       checked={shipping === 15}
                       onChange={() => setShipping(15)}
@@ -233,7 +299,12 @@ const Cart = () => {
                     />
                     <Form.Check
                       type="radio"
-                      label="Overnight Shipping - $30.00"
+                      label={
+                        <>
+                          Overnight Shipping
+                          <span className="shipping-price">$30.00</span>
+                        </>
+                      }
                       name="shipping"
                       checked={shipping === 30}
                       onChange={() => setShipping(30)}
@@ -241,9 +312,25 @@ const Cart = () => {
                     />
                   </div>
                   
+                  <div className="security-features mt-4 p-3 bg-light rounded">
+                    <div className="d-flex align-items-center mb-2">
+                      <FaShieldAlt className="text-success me-2" />
+                      <small className="text-muted">Secure SSL Encryption</small>
+                    </div>
+                    <div className="d-flex align-items-center mb-2">
+                      <FaSyncAlt className="text-primary me-2" />
+                      <small className="text-muted">30-Day Return Policy</small>
+                    </div>
+                    <div className="d-flex align-items-center">
+                      <FaCreditCard className="text-info me-2" />
+                      <small className="text-muted">Multiple Payment Options</small>
+                    </div>
+                  </div>
+                  
                   <Button 
-                    className="btn-order-whatsapp"
+                    className="btn-order-whatsapp mt-4"
                     onClick={handleOrderNow}
+                    disabled={cartItems.length === 0 || cartItems.some(item => !item.inStock)}
                   >
                     <FaWhatsapp className="me-2" />
                     Order Now via WhatsApp
@@ -251,8 +338,9 @@ const Cart = () => {
                   
                   <p className="whatsapp-note mt-3">
                     <small>
-                      You'll be redirected to WhatsApp to confirm your order with our team.
-                      Phone: +91 9460092903
+                      💬 You'll be redirected to WhatsApp to complete your order.<br/>
+                      📞 <strong>Support:</strong> +91 9460092903<br/>
+                      ⏰ <strong>Hours:</strong> 9AM - 9PM (7 days)
                     </small>
                   </p>
                 </div>
