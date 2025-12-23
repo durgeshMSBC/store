@@ -47,8 +47,8 @@ const Header = () => {
       <Container className="container-modern">
         {/* Logo */}
         <Navbar.Brand as={Link} to="/" className="brand" data-aos="fade-down">
-          <span className="brand-main">N.O.Z</span>
-          <span className="brand-sub">STREETSTYLE</span>
+          <span className="brand-main">Shoes</span>
+          <span className="brand-sub">AHMEDABAD</span>
         </Navbar.Brand>
 
         {/* Desktop Nav */}

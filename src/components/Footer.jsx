@@ -128,7 +128,7 @@ const Footer = () => {
         
         {/* Footer Bottom */}
         <div className="footer-bottom text-center py-4 border-top">
-          <p className="mb-2">&copy; {new Date().getFullYear()} N.O.Z StreetStyle. All rights reserved.</p>
+          <p className="mb-2">&copy; {new Date().getFullYear()} SHOES AHMEDABAD All rights reserved.</p>
           <p className="epsilon-address mb-0">Epsilon Address</p>
         </div>
       </Container>
