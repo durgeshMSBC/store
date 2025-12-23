@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Card, Button } from 'react-bootstrap'
 import { FaStar, FaShoppingCart, FaEye, FaHeart } from 'react-icons/fa'
 import './ProductCard.scss'
+import { useCart } from '../contexts/CartContext'
 
 const ProductCard = ({ product, onAddToCart, onQuickView }) => {
   const [selectedSize, setSelectedSize] = useState('')
@@ -38,6 +39,8 @@ const handleAddToCart = (e) => {
   })
 }
 
+
+  const { formatPrice } = useCart()
 
   return (
     <Card 
@@ -160,9 +163,9 @@ const handleAddToCart = (e) => {
         {/* Price & Action */}
         <div className="product-price-section">
           <div className="price-container">
-            <span className="current-price">${product.price.toFixed(2)}</span>
+            <span className="current-price">{formatPrice(product.price)}</span>
             {product.originalPrice && (
-              <span className="original-price">${product.originalPrice.toFixed(2)}</span>
+              <span className="original-price">{formatPrice(product.originalPrice)}</span>
             )}
           </div>
           

@@ -313,13 +313,7 @@
       color: $primary-black;
       font-size: 1.2rem;
       position: relative;
-      
-      &::before {
-        content: '$';
-        font-size: 0.9rem;
-        opacity: 0.7;
-        margin-right: 2px;
-      }
+    
     }
     
     .quantity-control {
@@ -509,13 +503,7 @@
           span:last-child {
             color: $accent-red;
             position: relative;
-            
-            &::before {
-              content: '$';
-              font-size: 1rem;
-              margin-right: 2px;
-              opacity: 0.8;
-            }
+          
           }
         }
       }

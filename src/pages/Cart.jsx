@@ -8,22 +8,25 @@ import shoes2 from '../assets/nike-2.webp'
 import { useCart } from '../contexts/CartContext'
 
 const Cart = () => {
-  const { cartItems, updateQuantity, removeItem, clearCart, shipping, setShipping, appliedCoupon, applyCoupon } = useCart()
+  const { cartItems, updateQuantity, removeItem, clearCart, shipping, setShipping, appliedCoupon, applyCoupon, computeDiscount, formatPrice, markOrderPlaced } = useCart()
   const [couponInput, setCouponInput] = useState('')
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0)
-  const discount = appliedCoupon ? subtotal * 0.1 : 0
+  const discount = computeDiscount(subtotal)
   const tax = (subtotal - discount) * 0.08
-  const total = subtotal - discount + shipping + tax
+  const shippingForTotal = appliedCoupon && appliedCoupon.kind === 'shipping' ? 0 : shipping
+  const total = subtotal - discount + shippingForTotal + tax
 
   const handleApplyCoupon = () => {
-    const ok = applyCoupon(couponInput)
+    const ok = applyCoupon(couponInput, subtotal)
     if (!ok) {
-      alert('Invalid coupon code')
+      alert('Invalid or inapplicable coupon code')
     }
   }
 
   const handleOrderNow = () => {
+    // mark first-time order (keeps FIRST10 logic intact)
+    markOrderPlaced()
     const phoneNumber = "9460092903"
     let message = "🚀 *NEW ORDER REQUEST*\n\n"
     message += "*Customer Information:*\n"
@@ -37,19 +40,19 @@ const Cart = () => {
       message += `   📏 Size: ${item.size}\n`
       message += `   🎨 Color: ${item.color}\n`
       message += `   🔢 Quantity: ${item.quantity}\n`
-      message += `   💰 Price: $${item.price.toFixed(2)}\n`
-      message += `   📊 Total: $${(item.price * item.quantity).toFixed(2)}\n`
+      message += `   💰 Price: ${formatPrice(item.price)}\n`
+      message += `   📊 Total: ${formatPrice(item.price * item.quantity)}\n`
       message += `   ${item.inStock ? '✅ In Stock' : '⚠️ Out of Stock'}\n`
     })
     
     message += "\n--------------------\n"
-    message += `\n*Subtotal:* $${subtotal.toFixed(2)}`
+    message += `\n*Subtotal:* ${formatPrice(subtotal)}`
     if (discount > 0) {
-      message += `\n*Discount (${appliedCoupon}):* -$${discount.toFixed(2)}`
+      message += `\n*Discount (${appliedCoupon ? appliedCoupon.code : ''}):* -${formatPrice(discount)}`
     }
-    message += `\n*Shipping:* $${shipping.toFixed(2)}`
-    message += `\n*Tax:* $${tax.toFixed(2)}`
-    message += `\n*Total Amount:* $${total.toFixed(2)}`
+    message += `\n*Shipping:* ${formatPrice(shippingForTotal)}`
+    message += `\n*Tax:* ${formatPrice(tax)}`
+    message += `\n*Total Amount:* ${formatPrice(total)}`
     message += "\n\n--------------------\n"
     message += "\n📞 *Contact Details:*\n"
     message += "Please contact me to confirm shipping address and payment details.\n\n"
@@ -148,7 +151,7 @@ const Cart = () => {
                             </div>
                           </td>
                           <td data-label="Price" className="price">
-                            ${item.price.toFixed(2)}
+                            {formatPrice(item.price)}
                           </td>
                           <td data-label="Quantity">
                             <div className="quantity-control">
@@ -173,7 +176,7 @@ const Cart = () => {
                             </div>
                           </td>
                           <td data-label="Total" className="total">
-                            ${(item.price * item.quantity).toFixed(2)}
+                            {formatPrice(item.price * item.quantity)}
                           </td>
                           <td data-label="Action">
                             <Button 
@@ -210,13 +213,13 @@ const Cart = () => {
                   <div className="summary-items">
                     <div className="summary-item">
                       <span>Subtotal</span>
-                      <span>${subtotal.toFixed(2)}</span>
+                          <span>{formatPrice(subtotal)}</span>
                     </div>
                     
                     <div className="summary-item">
                       <span>Discount</span>
-                      <span className="text-success">
-                        {discount > 0 ? `-$${discount.toFixed(2)}` : '$0.00'}
+                        <span className="text-success">
+                        {discount > 0 ? `-${formatPrice(discount)}` : formatPrice(0)}
                       </span>
                     </div>
                     
@@ -225,7 +228,7 @@ const Cart = () => {
                         <FaTruck className="me-2" />
                         Shipping
                       </span>
-                      <span>${shipping.toFixed(2)}</span>
+                      <span>{formatPrice(shippingForTotal)}</span>
                     </div>
                     
                     <div className="summary-item">
@@ -233,12 +236,12 @@ const Cart = () => {
                         <FaShieldAlt className="me-2" />
                         Tax (8%)
                       </span>
-                      <span>${tax.toFixed(2)}</span>
+                      <span>{formatPrice(tax)}</span>
                     </div>
                     
                     <div className="summary-item total">
-                      <span>Total Amount</span>
-                      <span>${total.toFixed(2)}</span>
+                        <span>Total Amount</span>
+                        <span>{formatPrice(total)}</span>
                     </div>
                   </div>
                   
@@ -261,7 +264,7 @@ const Cart = () => {
                       </div>
                       {appliedCoupon && (
                         <small className="text-success d-block mt-2">
-                          🎉 10% discount applied with code {appliedCoupon}
+                          🎉 {appliedCoupon.description} ({appliedCoupon.code})
                         </small>
                       )}
                   </div>
@@ -276,7 +279,7 @@ const Cart = () => {
                       label={
                         <>
                           Standard Shipping
-                          <span className="shipping-price">$0.00</span>
+                          <span className="shipping-price">{formatPrice(0)}</span>
                         </>
                       }
                       name="shipping"
@@ -289,12 +292,12 @@ const Cart = () => {
                       label={
                         <>
                           Express Shipping (2-3 days)
-                          <span className="shipping-price">$15.00</span>
+                          <span className="shipping-price">{formatPrice(150)}</span>
                         </>
                       }
                       name="shipping"
-                      checked={shipping === 15}
-                      onChange={() => setShipping(15)}
+                      checked={shipping === 150}
+                      onChange={() => setShipping(150)}
                       className="shipping-option"
                     />
                     <Form.Check
@@ -302,12 +305,12 @@ const Cart = () => {
                       label={
                         <>
                           Overnight Shipping
-                          <span className="shipping-price">$30.00</span>
+                          <span className="shipping-price">{formatPrice(300)}</span>
                         </>
                       }
                       name="shipping"
-                      checked={shipping === 30}
-                      onChange={() => setShipping(30)}
+                      checked={shipping === 300}
+                      onChange={() => setShipping(300)}
                       className="shipping-option"
                     />
                   </div>

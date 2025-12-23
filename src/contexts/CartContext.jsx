@@ -3,11 +3,13 @@ import React, { createContext, useContext, useEffect, useState } from 'react'
 const CartContext = createContext()
 
 const STORAGE_KEY = 'store_cart_v1'
+const META_KEY = 'store_cart_meta_v1'
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
   const [shipping, setShipping] = useState(0)
-  const [appliedCoupon, setAppliedCoupon] = useState('')
+  const [appliedCoupon, setAppliedCoupon] = useState(null)
+  const [hasOrdered, setHasOrdered] = useState(false)
 
   useEffect(() => {
     try {
@@ -18,6 +20,21 @@ export const CartProvider = ({ children }) => {
     }
   }, [])
 
+  
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(META_KEY)
+      if (raw) {
+        const meta = JSON.parse(raw)
+        if (meta.appliedCoupon) setAppliedCoupon(meta.appliedCoupon)
+        if (meta.hasOrdered) setHasOrdered(Boolean(meta.hasOrdered))
+      }
+    } catch (e) {
+      console.warn('Failed to read cart meta from localStorage', e)
+    }
+  }, [])
+
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems))
@@ -25,6 +42,17 @@ export const CartProvider = ({ children }) => {
       console.warn('Failed to save cart to localStorage', e)
     }
   }, [cartItems])
+
+  
+
+  useEffect(() => {
+    try {
+      const meta = { appliedCoupon, hasOrdered }
+      localStorage.setItem(META_KEY, JSON.stringify(meta))
+    } catch (e) {
+      console.warn('Failed to save cart meta to localStorage', e)
+    }
+  }, [appliedCoupon, hasOrdered])
 
   const addToCart = (product, options = {}) => {
     setCartItems(items => {
@@ -64,16 +92,71 @@ export const CartProvider = ({ children }) => {
     setCartItems(items => items.filter(item => item.id !== id))
   }
 
-  const clearCart = () => setCartItems([])
-
-  const applyCoupon = (code) => {
-    if (!code) return
-    if (code.toLowerCase() === 'save10') {
-      setAppliedCoupon('SAVE10')
-      return true
+  const clearCart = () => {
+    setCartItems([])
+    try {
+      localStorage.removeItem(STORAGE_KEY)
+    } catch (e) {
+      console.warn('Failed to remove cart from localStorage', e)
     }
-    return false
+    try {
+      localStorage.removeItem(META_KEY)
+    } catch (e) {
+      console.warn('Failed to remove cart meta from localStorage', e)
+    }
+    // reset applied coupon and shipping when user clears cart
+    setAppliedCoupon(null)
+    setShipping(0)
   }
+
+  const COUPONS = {
+    FIRST10: { code: 'FIRST10', kind: 'percent', value: 10, description: '10% off for first-time customers', firstTimeOnly: true },
+    WELCOME50: { code: 'WELCOME50', kind: 'flat', value: 50, description: '₹50 off on orders over ₹500', minSubtotal: 500 },
+    FREESHIP: { code: 'FREESHIP', kind: 'shipping', value: 0, description: 'Free standard shipping' }
+  }
+
+  const formatPrice = (value) => {
+    try {
+      return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR' }).format(value)
+    } catch (e) {
+      return `₹${Number(value).toFixed(2)}`
+    }
+  }
+
+  const computeDiscount = (subtotal) => {
+    if (!appliedCoupon) return 0
+    const c = appliedCoupon
+    if (c.kind === 'percent') {
+      return Math.min(subtotal, (subtotal * (c.value / 100)))
+    }
+    if (c.kind === 'flat') {
+      if (c.minSubtotal && subtotal < c.minSubtotal) return 0
+      return Math.min(subtotal, c.value)
+    }
+    return 0
+  }
+
+  const applyCoupon = (code, subtotal = 0) => {
+    if (!code) return false
+    const key = code.trim().toUpperCase()
+    const coupon = COUPONS[key]
+    if (!coupon) return false
+    // first time only check
+    if (coupon.firstTimeOnly && hasOrdered) return false
+    // min subtotal check handled in computeDiscount, but we can validate here as well
+    if (coupon.minSubtotal && subtotal < coupon.minSubtotal) return false
+    setAppliedCoupon(coupon)
+    // if coupon is shipping, optionally set shipping to 0 here (Cart UI will respect appliedCoupon)
+    return true
+  }
+
+  const removeCoupon = () => setAppliedCoupon(null)
+
+  const markOrderPlaced = () => {
+    setHasOrdered(true)
+  }
+
+  
 
   const value = {
     cartItems,
@@ -84,7 +167,12 @@ export const CartProvider = ({ children }) => {
     shipping,
     setShipping,
     appliedCoupon,
-    applyCoupon
+    applyCoupon,
+    removeCoupon,
+    computeDiscount,
+    formatPrice,
+    markOrderPlaced,
+    hasOrdered
   }
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>

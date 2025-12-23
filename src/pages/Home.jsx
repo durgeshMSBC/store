@@ -8,7 +8,7 @@ import './Home.scss'
 import hero1 from '../assets/nike-1.webp'
 import hero2 from '../assets/nike-2.webp'
 import { useCart } from '../contexts/CartContext'
-import { products as productsData } from '../data/Products'
+import insta from '../assets/insta.jpg'
 
 const Home = () => {
   const [newProducts, setNewProducts] = useState([])
@@ -18,12 +18,41 @@ const Home = () => {
 
 
   useEffect(() => {
-    // Use central products data and simulate a short loading delay
     setTimeout(() => {
-      const featured = productsData.filter(p => p.featured || p.isNew).slice(0, 3)
-      setNewProducts(featured)
+      const products = [
+        {
+          id: 1,
+          name: "BISSELIZING BAGGED CANISTER VACUUM",
+          category: "PURPLE.4122",
+          price: 498.32,
+          originalPrice: 599.99,
+          discount: 17,
+          image: hero1,
+          isNew: true
+        },
+        {
+          id: 2,
+          name: "BLACK & RECKEN LENZOIC 09-VOLT MAX",
+          category: "LITHIUM-10V DRILL",
+          price: 22.49,
+          originalPrice: 34.99,
+          discount: 36,
+          image: hero2
+        },
+        {
+          id: 3,
+          name: "ROSS OFFICE PRODUCTS RECEPTION",
+          category: "BURTON NIEWS SPECTRE",
+          price: 89.99,
+          originalPrice: 120.00,
+          discount: 25,
+          image: hero1,
+          isNew: true
+        }
+      ]
+      setNewProducts(products)
       setLoading(false)
-    }, 500)
+    }, 1000)
   }, [])
 
   const { addToCart } = useCart()
@@ -91,6 +120,7 @@ const Home = () => {
 
       {/* Services Section */}
       <Services />
+
 
       {/* New Products Section */}
       <section className="new-products-section">
