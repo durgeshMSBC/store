@@ -68,7 +68,7 @@ const Footer = () => {
             </ul>
           </Col>
           
-          {/* Happy Hours */}
+          {/* Happy Hours */} 
           <Col lg={2} md={4} sm={6} className="mb-4">
             <h5 className="footer-title">HAPPY HOURS</h5>
             <div className="happy-hours">

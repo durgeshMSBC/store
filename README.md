@@ -73,4 +73,8 @@ export default defineConfig([
 
 
 // i want to start a small business of shoes selling, my budgut is 10k-20k. i have a wholseller perosn which is give me shoes in affordable price than i can resell it with 40-50% margin. one shoes wholesell price is 800rs and i can resale it in 1200rs so give me idea of that how can i manage it properly. like i have also created product list website for direct whts app order. and i want to create a insta acocunt also for and  how can manage all things like for insta ads, payment process, use my another saving account?, what can i do for packing mateiral?,  how handle cash on delivery process ?, in ahmedabad i can do same day and 1-2hr in delivery ?.im also plan to use another sim card for whats app business . so givre me all these thing and another if require with better solutions. 
+
+
+
+// https://chat.deepseek.com/a/chat/s/fb0772f2-cec5-4363-8240-9c54ecb64964
 ```
